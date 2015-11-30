@@ -18,5 +18,8 @@
   "homepage": "https://github.com/broccoliapps/mwlt-server#readme",
   "dependencies": {
     "koa": "^1.1.2"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.4"
   }
 }
