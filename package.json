@@ -4,8 +4,8 @@
   "description": "MusicWorthListeningTo server",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --harmony server.js"
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon --harmony server.js",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
