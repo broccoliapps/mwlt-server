@@ -29,10 +29,10 @@ function startDatabase(){
     DB_USER: DB_USER,
     DB_PASS: DB_PASS
   };
-  
+
   var options = {
     dialect: DB_DIALECT,
-    port: DB_PORT
+    port:    DB_PORT
   };
 
   return db.initialize(connection, options);

@@ -1,7 +1,7 @@
 // Import npm packages
 var Sequelize = require('sequelize');
 
-// Define User schema 
+// Define User schema
 var User = {
   username: Sequelize.STRING,
   password: Sequelize.STRING
