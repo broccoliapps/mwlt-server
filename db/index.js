@@ -2,23 +2,23 @@
 var Sequelize = require('sequelize');
 
 // Database schemas
-var User = require('./schema/User');
+var schemas = require('./schemas');
 
 var db = {
 
   sequelize: null,
 
   /**
-   * Connects to the database and drops all tables, 
+   * Connects to the database and drops all tables,
    * then redefines them from the database schemas.
    * @return {Promise}
    */
   initialize: function(connection, options){
 
     this.sequelize = new Sequelize(
-      connection.DB_NAME, 
+      connection.DB_NAME,
       connection.DB_USER,
-      connection.DB_PASS, 
+      connection.DB_PASS,
       options);
 
     // Allow bound functions to be gc'ed by assigning them to variables.
@@ -41,7 +41,9 @@ module.exports = db;
  */
 function _defineSchemas(){
 
-  this.sequelize.define('User', User);
+  Object.keys(schemas).forEach((name) => (
+    this.sequelize.define(name, schemas[name])
+  ));
 
   return this.sequelize
     .sync({ force: true });
