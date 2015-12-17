@@ -1,6 +1,5 @@
-// Import npm packages
-var koa       = require('koa'),
-    Sequelize = require('sequelize');
+// Database w/ Sequelize
+var db = require('./db');
 
 // Set up environment variables
 require('dotenv').load();
@@ -12,29 +11,31 @@ const PORT       = process.env.PORT || 3000,
       DB_DIALECT = "postgres";
 
 // Initialize koa
-var app = koa();
+var app = require('koa')();
 
-// Instantiate sequelize
-var sequelize = null;
-startSequelize()
+// Start App
+startDatabase()
   .then(setRoutes)
-  .catch(logSequelizeError)
-  .done(startApp);
+  .then(startApp);
 
 /**
- * startSequelize
- * Uses env variables to begin the authentication process with postgres.
- * @return Promise
+ * startDatabase
+ * Uses env variables to connect to database and load up schemas.
+ * @return {Promise}
  */
-function startSequelize(err) {
-  var sequelizeOptions = {
+function startDatabase(){
+  var connection = {
+    DB_NAME: DB_NAME,
+    DB_USER: DB_USER,
+    DB_PASS: DB_PASS
+  };
+  
+  var options = {
     dialect: DB_DIALECT,
-    port:    DB_PORT
+    port: DB_PORT
   };
 
-  sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASS, sequelizeOptions);
-
-  return sequelize.authenticate();
+  return db.initialize(connection, options);
 }
 
 /**
@@ -45,15 +46,6 @@ function setRoutes(err) {
   app.use(function *(){
     this.body = 'Hello World';
   });
-  console.log('Database connection has been established successfully.');
-}
-
-/**
- * logSequelizeError
- * Fires if sequelize instance can't connect to database.
- */
-function logSequelizeError(err){
-  console.log('Unable to connect to the database:', err);
 }
 
 /**
