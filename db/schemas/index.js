@@ -1,7 +1,7 @@
 var User = require('./User');
 
 var schemas = {
-  User: User
+  User
 };
 
 module.exports = schemas;
