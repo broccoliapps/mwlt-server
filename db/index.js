@@ -1,5 +1,15 @@
-var Sequelize = require('sequelize'),
-    schemas   = require('./schemas');
+var dotenv    = require('dotenv'),
+    Sequelize = require('sequelize');
+
+var schemas   = require('./schemas');
+
+// Set up environment variables
+dotenv.load();
+const DB_NAME    = process.env.DB_NAME,
+      DB_USER    = process.env.DB_USER,
+      DB_PASS    = process.env.DB_PASS,
+      DB_PORT    = process.env.DB_PORT,
+      DB_DIALECT = "postgres";
 
 var db = {
 
@@ -10,21 +20,20 @@ var db = {
    * then redefines them from the database schemas.
    * @return {Promise}
    */
-  initialize: function(connection, options){
+  initialize: function(){
 
-    this.sequelize = new Sequelize(
-      connection.DB_NAME,
-      connection.DB_USER,
-      connection.DB_PASS,
-      options);
+    var options = {
+      dialect: DB_DIALECT,
+      port:    DB_PORT
+    };
+    this.sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASS, options);
 
     // Allow bound functions to be gc'ed by assigning them to variables.
-    var logConnectionSuccess = _logConnectionSuccess.bind(this, options.port),
-        defineSchemas        = _defineSchemas.bind(this);
+    var defineSchemas = _defineSchemas.bind(this);
 
     return this.sequelize
       .authenticate()
-      .then(logConnectionSuccess, _logSequelizeError)
+      .then(_logConnectionSuccess, _logSequelizeError)
       .then(defineSchemas, _logSequelizeError);
   }
 
@@ -32,7 +41,6 @@ var db = {
 module.exports = db;
 
 /**
- * _defineSchemas
  * Sets the schemas on the sequelize instance.
  * @return {Promise}
  */
@@ -46,18 +54,10 @@ function _defineSchemas(){
     .sync({ force: true });
 }
 
-/**
- * _logConnectionSuccess
- * Fires if sequelize instance connects to database successfully.
- */
-function _logConnectionSuccess(port){
-  console.log('Database listening on port:', port);
+function _logConnectionSuccess(){
+  console.log('Database listening on port:', DB_PORT);
 }
 
-/**
- * _logSequelizeError
- * Fires if sequelize instance can't connect to database.
- */
 function _logSequelizeError(err){
   console.log(err);
 }
