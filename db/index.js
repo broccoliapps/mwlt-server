@@ -1,8 +1,5 @@
-// npm packages
-var Sequelize = require('sequelize');
-
-// Database schemas
-var schemas = require('./schemas');
+var Sequelize = require('sequelize'),
+    schemas   = require('./schemas');
 
 var db = {
 
@@ -28,7 +25,7 @@ var db = {
     return this.sequelize
       .authenticate()
       .then(logConnectionSuccess, _logSequelizeError)
-      .then(defineSchemas, _logSequelizeError)
+      .then(defineSchemas, _logSequelizeError);
   }
 
 };
@@ -36,7 +33,7 @@ module.exports = db;
 
 /**
  * _defineSchemas
- * Sets the schemas on the sequelize singleton.
+ * Sets the schemas on the sequelize instance.
  * @return {Promise}
  */
 function _defineSchemas(){
