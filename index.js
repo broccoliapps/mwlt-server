@@ -1,4 +1,3 @@
-// Database w/ Sequelize
 var db = require('./db');
 
 // Set up environment variables
@@ -10,10 +9,8 @@ const PORT       = process.env.PORT || 3000,
       DB_PORT    = process.env.DB_PORT,
       DB_DIALECT = "postgres";
 
-// Initialize koa
 var app = require('koa')();
 
-// Start App
 startDatabase()
   .then(setRoutes)
   .then(startApp);
@@ -25,9 +22,9 @@ startDatabase()
  */
 function startDatabase(){
   var connection = {
-    DB_NAME: DB_NAME,
-    DB_USER: DB_USER,
-    DB_PASS: DB_PASS
+    DB_NAME,
+    DB_USER,
+    DB_PASS
   };
 
   var options = {
@@ -40,7 +37,7 @@ function startDatabase(){
 
 /**
  * setRoutes
- * Takes the global app and adds routes and middleware.
+ * Takes the global app and adds routes.
  */
 function setRoutes(err) {
   app.use(function *(){
