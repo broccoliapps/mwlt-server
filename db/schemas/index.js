@@ -1,7 +1,4 @@
 var User = require('./User');
 
-var schemas = {
-  User
-};
+module.exports = { User }; 
 
-module.exports = schemas;
